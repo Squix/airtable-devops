@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "airtable-table-schema",
+  "title": "Table",
+  "description": "An airtable table with its fields.",
+  "$comment": "This schema is on par with airtable.com/developers/web/api/model/table-model. Views are currently ignored.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "readonly": true
+    },
+    "primaryFieldId": {
+      "type": "string",
+      "description": "The first column in the table and every view."
+    },
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "fields": {
+      "type": "array",
+      "items": {
+        "$ref": "airtable-field-schema"
+      }
+    }
+  },
+  "required": ["id", "primaryFieldId", "name", "fields"]
+}

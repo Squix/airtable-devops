@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "airtable-field-schema",
+  "title": "Field",
+  "description": "An airtable field with its options.",
+  "$comment": "This schema is on par with airtable.com/developers/web/api/model/table-model#fields",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "readonly": true
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "singleLineText",
+        "multilineText",
+        "richText",
+        "number",
+        "percent",
+        "currency",
+        "rating",
+        "date",
+        "dateTime",
+        "duration",
+        "createdTime",
+        "lastModifiedTime",
+        "singleSelect",
+        "multipleSelect",
+        "singleCollaborator",
+        "multipleCollaborators",
+        "multipleAttachments",
+        "multipleRecordLinks",
+        "checkbox",
+        "url",
+        "email",
+        "phoneNumber",
+        "formula",
+        "rollup",
+        "lookup",
+        "multipleLookupValues",
+        "count",
+        "autoNumber",
+        "barcode",
+        "button",
+        "createdBy",
+        "lastModifiedBy",
+        "externalSyncSource",
+        "aiText"
+      ]
+    },
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "options": {
+      "type": "object"
+    }
+  },
+  "required": ["id", "name"]
+}
