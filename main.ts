@@ -1,4 +1,5 @@
 import { Command } from "@cliffy/command";
+import { get_schema_command } from "./commands/get_schema.ts";
 
 // Define the version globally
 const VERSION = "1.0.0";
@@ -11,13 +12,6 @@ if (import.meta.main) {
 //When CLI is run
 async function main() {
   //Commands definition
-
-  //get-schema command
-  const get_schema_command = new Command()
-    .description(
-      "Generate schema files representing the structure of an Airtable base."
-    )
-    .action(async () => console.log("get-schema"));
 
   const main_command = new Command()
     //main command
