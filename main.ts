@@ -18,7 +18,18 @@ async function main() {
     .name("airtable-devops")
     .version(VERSION)
     .description("DevOps tools for Airtable.")
+    .globalEnv(
+      "AIRTABLE_PAT=<value:string>",
+      "Your Airtable Personal Access Token with access to the desired bases."
+    )
+    .globalAction((options) => {
+      if (options.env?.AIRTABLE_PAT) {
+        Deno.env.set("AIRTABLE_PAT", options.env.AIRTABLE_PAT);
+      }
+    })
     .action(() => main_command.showHelp())
+
+    //subcommands
     .command("get-schema", get_schema_command);
 
   try {
