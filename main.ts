@@ -1,5 +1,6 @@
 import { Command } from "@cliffy/command";
 import { get_schema_command } from "./commands/get_schema.ts";
+import { colors } from "@cliffy/ansi/colors";
 
 // Define the version globally
 const VERSION = "1.0.0";
@@ -8,6 +9,13 @@ const VERSION = "1.0.0";
 if (import.meta.main) {
   main();
 }
+
+//Define theme colors
+export const log_colors = {
+  error: colors.bold.red,
+  warn: colors.bold.yellow,
+  info: colors.bold.blue,
+};
 
 //When CLI is run
 async function main() {
