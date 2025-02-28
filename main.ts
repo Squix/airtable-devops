@@ -14,7 +14,7 @@ type AIRTABLE_PATH_PARAMS = {
   baseId?: string;
 };
 export const AIRTABLE_PATH_PARAMS_FORMAT = {
-  baseId: /^[a-zA-Z0-9]{17}$/,
+  baseId: /^app[a-zA-Z0-9]*$/,
 };
 
 // Learn more at https://docs.deno.com/runtime/manual/examples/module_metadata#concepts
@@ -53,8 +53,8 @@ async function main() {
     })
 
     //custom types available for all subcommands
-    .globalType("baseId", (value: string) => {
-      if (AIRTABLE_PATH_PARAMS_FORMAT.baseId.test(value)) {
+    .globalType("AirtableBaseId", (value: { value: string }) => {
+      if (AIRTABLE_PATH_PARAMS_FORMAT.baseId.test(value.value)) {
         return value;
       } else {
         throw new Error(
@@ -71,7 +71,7 @@ async function main() {
   try {
     await main_command.parse(Deno.args);
   } catch (error: any) {
-    console.error("Error: ", error.message);
+    log.error(error.message);
     Deno.exit(1);
   }
 }
