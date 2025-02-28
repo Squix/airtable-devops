@@ -25,7 +25,7 @@ async function getSchema(options: { baseId: string }) {
 
   log.info("Getting schema...");
 
-  const params = { baseId: "test" };
+  const params = { baseId: options.baseId };
 
   console.log(
     "encodedEndpoint",
@@ -48,7 +48,7 @@ async function getSchema(options: { baseId: string }) {
       );
     }
 
-    const remote_base_schema = remote_base_schema_response.json();
+    const remote_base_schema = await remote_base_schema_response.json();
 
     log.info("Schema received: " + JSON.stringify(remote_base_schema));
   } catch (error: any) {
