@@ -12,9 +12,11 @@ if (import.meta.main) {
 
 //Define theme colors
 export const log_colors = {
-  error: colors.bold.red,
-  warn: colors.bold.yellow,
-  info: colors.bold.blue,
+  error: (message: string) =>
+    console.log(colors.bold.red("[ERROR] " + message)),
+  warn: (message: string) =>
+    console.log(colors.bold.yellow("[WARNING] " + message)),
+  info: (message: string) => console.log(colors.bold.blue("[INFO] " + message)),
 };
 
 //When CLI is run
