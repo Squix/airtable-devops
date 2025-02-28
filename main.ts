@@ -5,10 +5,17 @@ import { colors } from "@cliffy/ansi/colors";
 // Define the version globally
 const VERSION = "1.0.0";
 
+//Airtable constants
 export const AIRTABLE_API_URL = "https://api.airtable.com/v0";
 export enum AIRTABLE_API_ENDPOINTS {
   get_base_schema = "v0/meta/bases/{baseId}/tables",
 }
+type AIRTABLE_PATH_PARAMS = {
+  baseId?: string;
+};
+export const AIRTABLE_PATH_PARAMS_FORMAT = {
+  baseId: /^[a-zA-Z0-9]{17}$/,
+};
 
 // Learn more at https://docs.deno.com/runtime/manual/examples/module_metadata#concepts
 if (import.meta.main) {
@@ -33,6 +40,8 @@ async function main() {
     .name("airtable-devops")
     .version(VERSION)
     .description("DevOps tools for Airtable.")
+
+    //env variables available for all subcommands
     .globalEnv(
       "AIRTABLE_PAT=<value:string>",
       "Your Airtable Personal Access Token with access to the desired bases."
@@ -42,6 +51,18 @@ async function main() {
         Deno.env.set("AIRTABLE_PAT", options.env.AIRTABLE_PAT);
       }
     })
+
+    //custom types available for all subcommands
+    .globalType("baseId", (value: string) => {
+      if (AIRTABLE_PATH_PARAMS_FORMAT.baseId.test(value)) {
+        return value;
+      } else {
+        throw new Error(
+          "baseId must start with 'app' and contain only alphanumeric characters."
+        );
+      }
+    })
+
     .action(() => main_command.showHelp())
 
     //subcommands
@@ -54,10 +75,6 @@ async function main() {
     Deno.exit(1);
   }
 }
-
-type AIRTABLE_PATH_PARAMS = {
-  baseId?: string;
-};
 
 export const bindEndpointsParams = (
   endpoint: string,
