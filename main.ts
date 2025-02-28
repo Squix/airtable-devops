@@ -5,6 +5,11 @@ import { colors } from "@cliffy/ansi/colors";
 // Define the version globally
 const VERSION = "1.0.0";
 
+export const AIRTABLE_API_URL = "https://api.airtable.com/v0";
+export enum AIRTABLE_API_ENDPOINTS {
+  get_base_schema = "v0/meta/bases/{baseId}/tables",
+}
+
 // Learn more at https://docs.deno.com/runtime/manual/examples/module_metadata#concepts
 if (import.meta.main) {
   main();
@@ -49,3 +54,30 @@ async function main() {
     Deno.exit(1);
   }
 }
+
+type AIRTABLE_PATH_PARAMS = {
+  baseId?: string;
+};
+
+export const bindEndpointsParams = (
+  endpoint: string,
+  params: AIRTABLE_PATH_PARAMS
+): string => {
+  const url = new URL(AIRTABLE_API_URL); // Base URL is required for URL class
+
+  // Replace path parameters
+  let path = endpoint;
+  for (const [key, value] of Object.entries(params)) {
+    path = path.replace(`{${key}}`, value);
+  }
+  url.pathname = path;
+
+  // Replace query parameters
+  for (const [key, value] of Object.entries(params)) {
+    if (url.searchParams.has(key)) {
+      url.searchParams.set(key, value);
+    }
+  }
+
+  return url.href;
+};
