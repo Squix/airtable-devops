@@ -11,7 +11,7 @@ if (import.meta.main) {
 }
 
 //Define theme colors
-export const log_colors = {
+export const log = {
   error: (message: string) =>
     console.error(colors.bold.red("[ERROR] " + message)),
   warn: (message: string) =>
