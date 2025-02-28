@@ -53,9 +53,9 @@ async function main() {
     })
 
     //custom types available for all subcommands
-    .globalType("AirtableBaseId", (value: { value: string }) => {
-      if (AIRTABLE_PATH_PARAMS_FORMAT.baseId.test(value.value)) {
-        return value;
+    .globalType("AirtableBaseId", (valueToTest: { value: string }) => {
+      if (AIRTABLE_PATH_PARAMS_FORMAT.baseId.test(valueToTest.value)) {
+        return valueToTest.value;
       } else {
         throw new Error(
           "baseId must start with 'app' and contain only alphanumeric characters."
@@ -81,7 +81,6 @@ export const bindEndpointsParams = (
   params: AIRTABLE_PATH_PARAMS
 ): string => {
   const url = new URL(AIRTABLE_API_URL); // Base URL is required for URL class
-
   // Replace path parameters
   let path = endpoint;
   for (const [key, value] of Object.entries(params)) {
