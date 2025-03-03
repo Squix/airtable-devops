@@ -27,5 +27,5 @@
       }
     }
   },
-  "required": ["id", "name", "workspaceId", "tables"]
+  "required": ["id", "tables"]
 }
