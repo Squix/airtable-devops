@@ -13,14 +13,14 @@ export const get_schema_command = new Command()
     { required: true }
   )
   .option(
-    "-o, --output <file:string>",
-    "The path to save the schema file. Default is './output/'.",
+    "-o, --output-dir <file:string>",
+    "The directory to save the schema file. Default is './output/'.",
     { default: "./output/" }
   )
   .action(getSchema);
 
 //main command function
-async function getSchema(options: { baseId: string; output: string }) {
+async function getSchema(options: { baseId: string; outputDir: string }) {
   //Airtable PAT is mandatory for this command
   const PAT = load_PAT_from_env();
   if (!PAT) {
@@ -58,14 +58,14 @@ async function getSchema(options: { baseId: string; output: string }) {
     const schema = { id: params.baseId, tables };
 
     //ensure output path ends with /
-    if (!options.output.endsWith("/")) {
-      options.output += "/";
+    if (!options.outputDir.endsWith("/")) {
+      options.outputDir += "/";
     }
 
     //write schema to file
     const now = new Date();
     const schema_file_path = join(
-      `${options.output}${options.baseId}_schema_${now
+      `${options.outputDir}${options.baseId}_schema_${now
         .toISOString()
         .replace(/[:.]/g, "-")}.json`
     ); //replace : and . with - to avoid issues with file names
