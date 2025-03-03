@@ -41,7 +41,7 @@ $env:$AIRTABLE_PAT=your_airtable_pat
 Generate schema files representing the structure of an Airtable base.
 
 ```sh
-deno run --allow-net --allow-env --allow-write get-schema --base-id <your_base_id> --output-dir <output_directory>
+deno run --allow-net --allow-env --allow-write main.ts get-schema --base-id <your_base_id> --output-dir <output_directory>
 ```
 
 - `--base-id` (required): The base ID to get the schema from.
@@ -50,7 +50,7 @@ deno run --allow-net --allow-env --allow-write get-schema --base-id <your_base_i
 Example:
 
 ```sh
-deno run --allow-net --allow-env --allow-write get-schema --base-id app1234567890 --output-dir ./schemas/
+deno run --allow-net --allow-env --allow-write main.ts get-schema --base-id app1234567890 --output-dir ./schemas/
 ```
 
 Breakdown of permissions :
