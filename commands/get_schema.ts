@@ -1,5 +1,6 @@
 import { Command } from "@cliffy/command";
 import { AIRTABLE_API_ENDPOINTS, bindEndpointsParams, log } from "../main.ts";
+import { dirname } from "@std/path";
 
 //get-schema command
 export const get_schema_command = new Command()
@@ -27,11 +28,6 @@ async function getSchema(options: { baseId: string }) {
 
   const params = { baseId: options.baseId };
 
-  console.log(
-    "encodedEndpoint",
-    bindEndpointsParams(AIRTABLE_API_ENDPOINTS.get_base_schema, params)
-  );
-
   try {
     const remote_base_schema_response = await fetch(
       bindEndpointsParams(AIRTABLE_API_ENDPOINTS.get_base_schema, params),
@@ -39,8 +35,6 @@ async function getSchema(options: { baseId: string }) {
         headers: { Authorization: `Bearer ${PAT}` },
       }
     );
-
-    console.log(remote_base_schema_response.status);
 
     if (remote_base_schema_response.status === 404) {
       throw new Error(
@@ -50,7 +44,28 @@ async function getSchema(options: { baseId: string }) {
 
     const remote_base_schema = await remote_base_schema_response.json();
 
-    log.info("Schema received: " + JSON.stringify(remote_base_schema));
+    //strip views from schema
+    const tables = remote_base_schema.tables.map((table: any) => {
+      delete table.views;
+      return table;
+    });
+
+    const schema = { id: params.baseId, tables };
+
+    //write schema to file
+    const now = new Date();
+    const schema_file_path = `./output/schema_${options.baseId}_${now
+      .toISOString()
+      .replace(/[:.]/g, "-")}.json`; //replace : and . with - to avoid issues with file names
+
+    // Ensure the directory exists
+    await Deno.mkdir(dirname(schema_file_path), { recursive: true });
+
+    await Deno.writeTextFile(schema_file_path, JSON.stringify(schema, null, 2));
+
+    log.success(
+      `Schema of base ${params.baseId} saved to: ${schema_file_path}.`
+    );
   } catch (error: any) {
     throw new Error("Error getting schema: " + error.message);
   }
