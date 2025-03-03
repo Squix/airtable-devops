@@ -1,6 +1,6 @@
 import { Command } from "@cliffy/command";
 import { AIRTABLE_API_ENDPOINTS, bindEndpointsParams, log } from "../main.ts";
-import { dirname } from "@std/path";
+import { dirname, join, parse } from "@std/path";
 
 //get-schema command
 export const get_schema_command = new Command()
@@ -12,10 +12,15 @@ export const get_schema_command = new Command()
     "The base id to get the schema from.",
     { required: true }
   )
+  .option(
+    "-o, --output <file:string>",
+    "The path to save the schema file. Default is './output/'.",
+    { default: "./output/" }
+  )
   .action(getSchema);
 
 //main command function
-async function getSchema(options: { baseId: string }) {
+async function getSchema(options: { baseId: string; output: string }) {
   //Airtable PAT is mandatory for this command
   const PAT = load_PAT_from_env();
   if (!PAT) {
@@ -52,11 +57,18 @@ async function getSchema(options: { baseId: string }) {
 
     const schema = { id: params.baseId, tables };
 
+    //ensure output path ends with /
+    if (!options.output.endsWith("/")) {
+      options.output += "/";
+    }
+
     //write schema to file
     const now = new Date();
-    const schema_file_path = `./output/schema_${options.baseId}_${now
-      .toISOString()
-      .replace(/[:.]/g, "-")}.json`; //replace : and . with - to avoid issues with file names
+    const schema_file_path = join(
+      `${options.output}${options.baseId}_schema_${now
+        .toISOString()
+        .replace(/[:.]/g, "-")}.json`
+    ); //replace : and . with - to avoid issues with file names
 
     // Ensure the directory exists
     await Deno.mkdir(dirname(schema_file_path), { recursive: true });
