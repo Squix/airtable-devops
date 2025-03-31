@@ -7,6 +7,11 @@ export const get_schema_command = new Command()
   .description(
     "Generate schema files representing the structure of an Airtable base."
   )
+  .env(
+    "AIRTABLE_PAT=<value:string>",
+    "Your Airtable Personal Access Token with access to the desired bases.",
+    { required: true }
+  )
   .option(
     "-b, --base-id <baseId:AirtableBaseId>",
     "The base id to get the schema from.",
@@ -20,9 +25,9 @@ export const get_schema_command = new Command()
   .action(getSchema);
 
 //main command function
-async function getSchema(options: { baseId: string; outputDir: string }) {
+async function getSchema(options: { baseId: string; outputDir: string; airtablePat: string   }) {
   //Airtable PAT is mandatory for this command
-  const PAT = load_PAT_from_env();
+  const PAT = load_PAT_from_env(options.airtablePat);
   if (!PAT) {
     throw new Error(
       "Missing Airtable Personal Access Token. Can't get schema."
@@ -82,7 +87,7 @@ async function getSchema(options: { baseId: string; outputDir: string }) {
     throw new Error("Error getting schema: " + error.message);
   }
 }
-
-function load_PAT_from_env() {
-  return Deno.env.get("AIRTABLE_PAT");
+function load_PAT_from_env(shell_PAT?: string) {
+  return shell_PAT || Deno.env.get("AIRTABLE_PAT");
 }
+

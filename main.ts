@@ -11,7 +11,7 @@ export const AIRTABLE_API_URL = "https://api.airtable.com/v0";
 export enum AIRTABLE_API_ENDPOINTS {
   get_base_schema = "v0/meta/bases/{baseId}/tables",
 }
-type AIRTABLE_PATH_PARAMS = {
+export type AIRTABLE_PATH_PARAMS = {
   baseId?: string;
 };
 export const AIRTABLE_PATH_PARAMS_FORMAT = {
@@ -43,17 +43,6 @@ async function main() {
     .name("airtable-devops")
     .version(VERSION)
     .description("DevOps tools for Airtable.")
-
-    //env variables available for all subcommands
-    .globalEnv(
-      "AIRTABLE_PAT=<value:string>",
-      "Your Airtable Personal Access Token with access to the desired bases."
-    )
-    .globalAction((options) => {
-      if (options.airtablePat) {
-        Deno.env.set("AIRTABLE_PAT", options.airtablePat);
-      }
-    })
 
     //custom types available for all subcommands
     .globalType("AirtableBaseId", (valueToTest: { value: string }) => {
