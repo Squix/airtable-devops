@@ -1,5 +1,6 @@
 import { Command } from "@cliffy/command";
 import { get_schema_command } from "./commands/get_schema.ts";
+import { validate_schema_command } from "./commands/validate.ts";
 import { colors } from "@cliffy/ansi/colors";
 
 // Define the version globally
@@ -49,8 +50,8 @@ async function main() {
       "Your Airtable Personal Access Token with access to the desired bases."
     )
     .globalAction((options) => {
-      if (options.env?.AIRTABLE_PAT) {
-        Deno.env.set("AIRTABLE_PAT", options.env.AIRTABLE_PAT);
+      if (options.airtablePat) {
+        Deno.env.set("AIRTABLE_PAT", options.airtablePat);
       }
     })
 
@@ -65,15 +66,16 @@ async function main() {
       }
     })
 
-    .action(() => main_command.showHelp())
+    .action((): void => main_command.showHelp())
 
     //subcommands
-    .command("get-schema", get_schema_command);
+    .command("get-schema", get_schema_command)
+    .command("validate", validate_schema_command);
 
   try {
     await main_command.parse(Deno.args);
-  } catch (error: any) {
-    log.error(error.message);
+  } catch (error: unknown) {
+    log.error(error instanceof Error ? error.message : "An unknown error occurred");
     Deno.exit(1);
   }
 }
