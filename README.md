@@ -53,13 +53,31 @@ Example:
 deno run --allow-net --allow-env --allow-write main.ts get-schema --base-id app1234567890 --output-dir ./schemas/
 ```
 
+#### Validate Schema
+
+Validate a schema file to ensure it follows the correct structure for an Airtable base.
+
+```sh
+deno run --allow-read main.ts validate --file <path_to_schema_file>
+```
+
+- `--file` (required): The path to the schema file to validate.
+
+Example:
+```sh
+deno run --allow-read main.ts validate --file ./schemas/base_schema.json
+```
+
+The command will provide detailed error messages if the schema is invalid, showing exactly what needs to be fixed and where.
+
 Breakdown of permissions :
-| **Permission flag** | **Optional** | **Usage**                            |
-|---------------------|--------------|--------------------------------------|
-| --allow-net         | No           | Access the Airtable REST API.        |
-| --allow-env         | No           | Load Airtable PAT from environment.  |
-| --allow-write       | No           | Write schema to a json file on disk. |
-| --env-file          | Yes          | Load Airtable PATH from env file.    |
+| **Permission flag** | **Optional** | **Usage**                              |
+|---------------------|--------------|----------------------------------------|
+| --allow-net         | No           | Access the Airtable REST API.          |
+| --allow-env         | No           | Load Airtable PAT from environment.    |
+| --allow-write       | No           | Write schema to a json file on disk.   |
+| --allow-read        | No           | Parse schema from a json file on disk. |
+| --env-file          | Yes          | Load Airtable PATH from env file.      |
 
 ## Contributing
 
