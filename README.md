@@ -21,9 +21,11 @@ To use this CLI, you need to have [Deno](https://deno.land/) installed on your m
 
 ### Setting Up Airtable PAT
 
-Some commands require to interact with the Airtable API, hence you need to supply a valid [Airtable Personal Access Token (PAT)](https://support.airtable.com/docs/creating-personal-access-tokens) that grants access to the resources you want the CLI to process.
+The *get-schema* command requires to interact with the Airtable API, hence you need to supply a valid [Airtable Personal Access Token (PAT)](https://support.airtable.com/docs/creating-personal-access-tokens) that grants access to the resources you want the CLI to process.
 
-You can do this by exporting the variable in your shell or using an .env file with an `AIRTABLE_PAT` property.
+I recommend creating an Airtable PAT only for usage with this tool, which only needs the **schema.bases:read** permission.
+
+You can do this by exporting the variable in your shell or using an .env file with an `AIRTABLE_PAT` item.
 
 Bash :
 ```sh
