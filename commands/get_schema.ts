@@ -1,6 +1,6 @@
 import { Command } from "@cliffy/command";
 import { AIRTABLE_API_ENDPOINTS, bindEndpointsParams, log } from "../main.ts";
-import { dirname, join, parse } from "@std/path";
+import { dirname, join } from "@std/path";
 
 //get-schema command
 export const get_schema_command = new Command()
@@ -25,7 +25,7 @@ export const get_schema_command = new Command()
   .action(getSchema);
 
 //main command function
-async function getSchema(options: { baseId: string; outputDir: string; airtablePat: string   }) {
+async function getSchema(options: { baseId: unknown; outputDir: string; airtablePat: string   }) {
   //Airtable PAT is mandatory for this command
   const PAT = load_PAT_from_env(options.airtablePat);
   if (!PAT) {
@@ -36,7 +36,7 @@ async function getSchema(options: { baseId: string; outputDir: string; airtableP
 
   log.info("Getting schema...");
 
-  const params = { baseId: options.baseId };
+  const params = { baseId: options.baseId as string };
 
   try {
     const remote_base_schema_response = await fetch(
