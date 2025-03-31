@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "airtable-base-schema",
+  "$id": "https://squixtech.com/schemas/airtable-base-schema",
   "title": "Base",
   "description": "An airtable base with its tables.",
   "$comment": "This schema is based on airtable.com/developers/web/api/create-base. Descriptions have been updated because we are not only in the new base creation context.",
@@ -9,7 +9,7 @@
     "id": {
       "type": "string",
       "description": "Base ID, a unique identifier for a base.",
-      "readonly": true
+      "readOnly": true
     },
     "name": {
       "type": "string",
@@ -23,7 +23,7 @@
       "type": "array",
       "description": "A list of JSON objects representing the tables of the base.",
       "items": {
-        "$ref": "airtable-tables-schema"
+        "$ref": "https://squixtech.com/schemas/airtable-table-schema"
       }
     }
   },

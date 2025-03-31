@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "airtable-table-schema",
+  "$id": "https://squixtech.com/schemas/airtable-table-schema",
   "title": "Table",
   "description": "An airtable table with its fields.",
   "$comment": "This schema is on par with airtable.com/developers/web/api/model/table-model. Views are currently ignored.",
@@ -8,7 +8,7 @@
   "properties": {
     "id": {
       "type": "string",
-      "readonly": true
+      "readOnly": true
     },
     "primaryFieldId": {
       "type": "string",
@@ -23,7 +23,7 @@
     "fields": {
       "type": "array",
       "items": {
-        "$ref": "airtable-field-schema"
+        "$ref": "https://squixtech.com/schemas/airtable-field-schema"
       }
     }
   },
