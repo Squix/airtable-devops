@@ -7,7 +7,7 @@ import fieldSchema from "../utils/schemas/field_json_schema.json" with { type: "
 import { log } from "../main.ts";
 
 // Function to format validation errors in a user-friendly way
-function formatValidationErrors(errors: ErrorObject[]): string {
+export function formatValidationErrors(errors: ErrorObject[]): string {
   return errors.map(error => {
     const path = error.instancePath ? ` at ${error.instancePath}` : '';
     const message = error.message;
@@ -31,7 +31,7 @@ const ajv = new Ajv2020({
 });
 
 // Pre-compile the validation function
-const validateSchema = ajv.compile({ $ref: "airtable-base-schema" });
+export const validateSchema = ajv.compile({ $ref: "airtable-base-schema" });
 
 //validate command
 export const validate_schema_command = new Command()
@@ -46,7 +46,7 @@ export const validate_schema_command = new Command()
   .action(validate);
   
 //main command function
-async function validate(options: { file: string }) {
+export async function validate(options: { file: string }) {
   try {
     // Read and parse the input file
     const inputSchema = JSON.parse(await Deno.readTextFile(options.file));
