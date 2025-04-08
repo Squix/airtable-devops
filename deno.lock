@@ -16,7 +16,7 @@
     "npm:ajv-formats@*": "3.0.1_ajv@8.17.1",
     "npm:ajv@*": "8.17.1",
     "npm:ajv@^8.17.1": "8.17.1",
-    "npm:json-schema-to-typescript@^15.0.4": "15.0.4"
+    "npm:json-schema-to-typescript@*": "15.0.4"
   },
   "jsr": {
     "@cliffy/ansi@1.0.0-rc.7": {
@@ -192,8 +192,7 @@
       "jsr:@cliffy/command@^1.0.0-rc.7",
       "jsr:@std/assert@1",
       "jsr:@std/path@^1.0.8",
-      "npm:ajv@^8.17.1",
-      "npm:json-schema-to-typescript@^15.0.4"
+      "npm:ajv@^8.17.1"
     ]
   }
 }
