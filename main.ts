@@ -43,7 +43,7 @@ async function main() {
     //main command
     .name("airtable-devops")
     .version(VERSION)
-    .description("🪄 DevOps tools for Airtable.")
+    .description("🪄  DevOps tools for Airtable.")
 
     //custom types available for all subcommands
     .globalType("AirtableBaseId", (valueToTest: { value: string }) => {
@@ -56,7 +56,9 @@ async function main() {
       }
     })
 
-    .action((): void => main_command.showHelp())
+    .action((): void => main_command.showHelp({
+      long:true
+    }))
 
     //subcommands
     .command("get-schema", get_schema_command)
