@@ -78,8 +78,8 @@ jobs:
   release:
     needs: build
     runs-on: ubuntu-latest
-    # Only create release when PR is merged to main
-    if: github.event.pull_request.merged == true
+    # Only create release when PR is merged to main or manual trigger
+    if: github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch'
     
     steps:
       - uses: actions/checkout@v4
