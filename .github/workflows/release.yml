@@ -1,0 +1,97 @@
+name: Build and Release
+
+on:
+  # Run on PR merges to main
+  pull_request:
+    types: [closed]
+    branches: [ main ]
+  # Manual trigger for all branches
+  workflow_dispatch:
+    inputs:
+      debug_enabled:
+        description: 'Run with debug logging'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  build:
+    # Only run if PR is merged or manual trigger
+    if: github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch'
+    runs-on: ${{ matrix.os }}
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            artifact_name: airtable-devops-linux
+          - os: windows-latest
+            artifact_name: airtable-devops-windows.exe
+          - os: macos-latest
+            artifact_name: airtable-devops-macos
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Get version from version.ts
+        id: get_version
+        run: |
+          VERSION=$(grep -o 'VERSION = "[^"]*"' version.ts | cut -d'"' -f2)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+      
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      
+      - name: Build binary
+        run: |
+          deno compile --allow-net --allow-env --allow-read --allow-write main.ts
+          # Rename the binary based on OS and version
+          if [ "${{ matrix.os }}" = "windows-latest" ]; then
+            mv airtable-devops.exe "airtable-devops-${{ steps.get_version.outputs.version }}-windows.exe"
+          else
+            mv airtable-devops "airtable-devops-${{ steps.get_version.outputs.version }}-${{ matrix.os == 'ubuntu-latest' && 'linux' || 'macos' }}"
+          fi
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: "airtable-devops-${{ steps.get_version.outputs.version }}-*"
+          if-no-files-found: error
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    # Only create release when PR is merged to main
+    if: github.event.pull_request.merged == true
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Create Git Tag
+        run: |
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+          git tag -a "v${{ needs.build.outputs.version }}" -m "Release v${{ needs.build.outputs.version }}"
+          git push origin "v${{ needs.build.outputs.version }}"
+      
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ needs.build.outputs.version }}
+          files: artifacts/*
+          generate_release_notes: true
+          draft: true
+          prerelease: false 
