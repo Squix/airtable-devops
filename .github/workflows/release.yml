@@ -16,6 +16,10 @@ on:
         default: false
         type: boolean
 
+# Add release creationpermissions for the GITHUB_TOKEN
+permissions:
+  contents: write
+
 jobs:
   build:
     # Only run if tag is on main branch or manual trigger
