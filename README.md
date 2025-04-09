@@ -21,7 +21,7 @@ To use this CLI, you need to have [Deno](https://deno.land/) installed on your m
 
 ## 🛠️ Usage
 
-### 🔑 Setting Up Airtable PAT
+### Setting Up Airtable PAT
 
 The *get-schema* command requires to interact with the Airtable API, hence you need to supply a valid [Airtable Personal Access Token (PAT)](https://support.airtable.com/docs/creating-personal-access-tokens) that grants access to the resources you want the CLI to process.
 
@@ -36,7 +36,7 @@ Powershell :
 $env:$AIRTABLE_PAT=your_airtable_pat
 ```
 
-### ⌨️ Commands
+### Commands
 
 #### 🔎 Get Schema
 
@@ -116,8 +116,8 @@ Base: app123456
 
 - Archives (REMOVED TABLE)
 ```
-
-Breakdown of permissions :
+### Deno permissions
+Breakdown of needed Deno permissions :
 | **Permission flag** | **Optional** | **Usage**                              |
 |---------------------|--------------|----------------------------------------|
 | --allow-net         | No           | Access the Airtable REST API.          |
@@ -128,8 +128,8 @@ Breakdown of permissions :
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
+Contributions are welcome! Please open an issue first for any improvements or bug fixes.
 
-## 📄 License
+## ⚖️ License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE.md) file for details.
