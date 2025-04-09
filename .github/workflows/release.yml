@@ -23,14 +23,27 @@ jobs:
       version: ${{ steps.get_version.outputs.version }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
         include:
           - os: ubuntu-latest
-            artifact_name: airtable-devops-linux
-          - os: windows-latest
+            target: x86_64-pc-windows-msvc
             artifact_name: airtable-devops-windows.exe
+            os_name: windows
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            artifact_name: airtable-devops-linux-x64
+            os_name: linux
+          - os: ubuntu-latest
+            target: aarch64-unknown-linux-gnu
+            artifact_name: airtable-devops-linux-arm64
+            os_name: linux
           - os: macos-latest
-            artifact_name: airtable-devops-macos
+            target: x86_64-apple-darwin
+            artifact_name: airtable-devops-macos-x64
+            os_name: macos
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            artifact_name: airtable-devops-macos-arm64
+            os_name: macos
     
     steps:
       - uses: actions/checkout@v4
@@ -48,12 +61,11 @@ jobs:
       
       - name: Build binary
         run: |
-          deno compile --allow-net --allow-env --allow-read --allow-write main.ts
-          # Rename the binary based on OS and version
-          if [ "${{ matrix.os }}" = "windows-latest" ]; then
-            mv airtable-devops.exe "airtable-devops-${{ steps.get_version.outputs.version }}-windows.exe"
-          else
-            mv airtable-devops "airtable-devops-${{ steps.get_version.outputs.version }}-${{ matrix.os == 'ubuntu-latest' && 'linux' || 'macos' }}"
+          deno compile --target ${{ matrix.target }} --allow-net --allow-env --allow-read --allow-write main.ts
+          # Rename the binary based on target and version
+          mv airtable-devops* "airtable-devops-${{ steps.get_version.outputs.version }}-${{ matrix.os_name }}-${{ matrix.target == 'x86_64-pc-windows-msvc' && 'x64' || matrix.target == 'x86_64-unknown-linux-gnu' && 'x64' || matrix.target == 'x86_64-apple-darwin' && 'x64' || matrix.target == 'aarch64-apple-darwin' && 'arm64' || 'arm64' }}"
+          if [ "${{ matrix.target }}" = "x86_64-pc-windows-msvc" ]; then
+            mv "airtable-devops-${{ steps.get_version.outputs.version }}-${{ matrix.os_name }}-x64" "airtable-devops-${{ steps.get_version.outputs.version }}-${{ matrix.os_name }}-x64.exe"
           fi
       
       - name: Upload artifact
