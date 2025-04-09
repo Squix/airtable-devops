@@ -1,3 +1,4 @@
+import { load } from "@std/dotenv";
 import { Command } from "@cliffy/command";
 import { AIRTABLE_API_ENDPOINTS, bindEndpointsParams, log } from "../main.ts";
 import { dirname, join } from "@std/path";
@@ -9,8 +10,7 @@ export const get_schema_command = new Command()
   )
   .env(
     "AIRTABLE_PAT=<value:string>",
-    "Your Airtable Personal Access Token with access to the desired bases.",
-    { required: true }
+    "Your Airtable Personal Access Token with access to the desired bases."
   )
   .option(
     "-b, --base-id <baseId:AirtableBaseId>",
@@ -25,9 +25,9 @@ export const get_schema_command = new Command()
   .action(getSchema);
 
 //main command function
-async function getSchema(options: { baseId: unknown; outputDir: string; airtablePat: string   }) {
+async function getSchema(options: { baseId: unknown; outputDir: string; airtablePat?: string   }) {
   //Airtable PAT is mandatory for this command
-  const PAT = load_PAT_from_env(options.airtablePat);
+  const PAT = await load_PAT_from_env(options.airtablePat);
   if (!PAT) {
     throw new Error(
       "Missing Airtable Personal Access Token. Can't get schema."
@@ -87,7 +87,9 @@ async function getSchema(options: { baseId: unknown; outputDir: string; airtable
     throw new Error("Error getting schema: " + error.message);
   }
 }
-function load_PAT_from_env(shell_PAT?: string) {
-  return shell_PAT || Deno.env.get("AIRTABLE_PAT");
+async function load_PAT_from_env(shell_PAT?: string) {
+  //load Airtable PAT from .env file
+  const { AIRTABLE_PAT: envFilePAT } = await load();
+  return shell_PAT || envFilePAT;
 }
 
