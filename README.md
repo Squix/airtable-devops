@@ -10,7 +10,7 @@ A set of DevOps tools for managing Airtable bases using the command line. The ma
 
 ## 📦 Installation
 
-### Option 1: Download pre-compiled binary (Recommended)
+### Option 1: Download pre-compiled binary (recommended)
 
 1. Visit the [releases page](https://github.com/Squix/airtable-devops/releases)
 2. Download the appropriate binary for your operating system
