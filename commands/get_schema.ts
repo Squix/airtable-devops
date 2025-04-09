@@ -46,6 +46,12 @@ async function getSchema(options: { baseId: unknown; outputDir: string; airtable
       }
     );
 
+    if (remote_base_schema_response.status === 401) {
+      throw new Error(
+        "Invalid Airtable Personal Access Token. Please check your PAT."
+      );
+    }
+    
     if (remote_base_schema_response.status === 404) {
       throw new Error(
         "base id does not exists or the provided PAT does not have access to it."
