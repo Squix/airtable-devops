@@ -1,6 +1,7 @@
 import { Command } from "@cliffy/command";
 import { get_schema_command } from "./commands/get_schema.ts";
 import { validate_schema_command } from "./commands/validate.ts";
+import { diff_schema_command } from "./commands/diff.ts";
 import { colors } from "@cliffy/ansi/colors";
 
 // Define the version globally
@@ -59,7 +60,8 @@ async function main() {
 
     //subcommands
     .command("get-schema", get_schema_command)
-    .command("validate", validate_schema_command);
+    .command("validate", validate_schema_command)
+    .command("diff", diff_schema_command);
 
   try {
     await main_command.parse(Deno.args);
