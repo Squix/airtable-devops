@@ -1,1 +1,4 @@
 /.vscode
+.env
+output
+dist
