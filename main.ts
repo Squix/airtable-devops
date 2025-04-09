@@ -3,9 +3,7 @@ import { get_schema_command } from "./commands/get_schema.ts";
 import { validate_schema_command } from "./commands/validate.ts";
 import { diff_schema_command } from "./commands/diff.ts";
 import { colors } from "@cliffy/ansi/colors";
-
-// Define the version globally
-const VERSION = "1.0.0";
+import { VERSION } from "./version.ts";
 
 //Airtable constants
 export const AIRTABLE_API_URL = "https://api.airtable.com/v0";
