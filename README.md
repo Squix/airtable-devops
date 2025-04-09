@@ -10,40 +10,59 @@ A set of DevOps tools for managing Airtable bases using the command line. The ma
 
 ## 📦 Installation
 
-To use this CLI, you need to have [Deno](https://deno.land/) installed on your machine.
+### Option 1: Download pre-compiled binary (Recommended)
 
-1. Install Deno by following the instructions on the [official website](https://deno.land/manual/getting_started/installation).
+1. Visit the [releases page](https://github.com/Squix/airtable-devops/releases)
+2. Download the appropriate binary for your operating system
+3. Make the binary executable (Unix/Linux/macOS):
+   ```sh
+   chmod +x airtable-devops
+   ```
+4. Move the binary to a directory in your PATH (optional)
+
+### Option 2: Run with Deno
+
+If you prefer to run the tool directly with Deno:
+
+1. Install [Deno](https://deno.land/manual/getting_started/installation)
 2. Clone this repository:
-    ```sh
-    git clone https://github.com/Squix/airtable-devops.git
-    cd airtable-devops
-    ```
+   ```sh
+   git clone https://github.com/Squix/airtable-devops.git
+   cd airtable-devops
+   ```
 
 ## 🛠️ Usage
 
-### Setting Up Airtable PAT
+### Setting up Airtable PAT
 
 The *get-schema* command requires to interact with the Airtable API, hence you need to supply a valid [Airtable Personal Access Token (PAT)](https://support.airtable.com/docs/creating-personal-access-tokens) that grants access to the resources you want the CLI to process.
 
-You can do this by exporting the variable in your shell or using an .env file with an `AIRTABLE_PAT` property.
+You can provide your PAT in one of two ways:
 
-Bash :
-```sh
-export AIRTABLE_PAT=your_airtable_pat
-```
-Powershell :
-```powershell
-$env:$AIRTABLE_PAT=your_airtable_pat
-```
+1. Using a `.env` file in your project root (recommended):
+   ```sh
+   AIRTABLE_PAT=your_airtable_pat
+   ```
+
+2. Exporting the variable in your shell:
+   ```sh
+   # Bash
+   export AIRTABLE_PAT=your_airtable_pat
+   
+   # Powershell
+   $env:AIRTABLE_PAT=your_airtable_pat
+   ```
+
+The tool will automatically load the PAT from your `.env` file if present. If not found, it will fall back to checking the shell environment variable.
 
 ### Commands
 
-#### 🔎 Get Schema
+#### 🔎 Get schema
 
 Generate schema files representing the structure of an Airtable base.
 
 ```sh
-deno run --allow-net --allow-env --allow-write main.ts get-schema --base-id <your_base_id> --output-dir <output_directory>
+deno run --allow-read --allow-net --allow-env --allow-write main.ts get-schema --base-id <your_base_id> --output-dir <output_directory>
 ```
 
 - `--base-id` (required): The base ID to get the schema from.
@@ -57,7 +76,7 @@ Example:
 deno run --allow-net --allow-env [--env-file] --allow-write main.ts get-schema --base-id app1234567890 --output-dir ./schemas/
 ```
 
-#### ✅ Validate Schema
+#### ✅ Validate schema
 
 Validate a schema file to ensure it follows the correct structure for an Airtable base.
 
@@ -74,7 +93,7 @@ deno run --allow-read main.ts validate --file ./schemas/base_schema.json
 
 The command will provide detailed error messages if the schema is invalid, showing exactly what needs to be fixed and where.
 
-#### 📋 Diff Schema
+#### 📋 Diff schema
 
 Compare two schema files and show structural changes in a human-readable format.
 
@@ -116,15 +135,29 @@ Base: app123456
 
 - Archives (REMOVED TABLE)
 ```
-### Deno permissions
-Breakdown of needed Deno permissions :
-| **Permission flag** | **Optional** | **Usage**                              |
-|---------------------|--------------|----------------------------------------|
-| --allow-net         | No           | Access the Airtable REST API.          |
-| --allow-env         | No           | Load Airtable PAT from environment.    |
-| --allow-write       | No           | Write schema to a json file on disk.   |
-| --allow-read        | No           | Parse schema from a json file on disk. |
-| --env-file          | Yes          | Load Airtable PATH from env file.      |
+
+## 🔧 Running with Deno
+
+If you're running the tool directly with Deno, you'll need to include the appropriate permission flags:
+
+```sh
+# Get Schema command
+deno run --allow-net --allow-env --allow-write --allow-read main.ts get-schema --base-id <your_base_id> --output-dir <output_directory>
+
+# Validate Schema command
+deno run --allow-read main.ts validate --file <path_to_schema_file>
+
+# Diff Schema command
+deno run --allow-read main.ts diff --old <old_schema_file> --new <new_schema_file> [--format <format>] [--color]
+```
+
+Breakdown of needed Deno permissions:
+| **Permission flag** | **Usage**                              |
+|---------------------|----------------------------------------|
+| --allow-net         | Access the Airtable REST API.          |
+| --allow-env         | Load Airtable PAT from environment.    |
+| --allow-write       | Write schema to a json file on disk.   |
+| --allow-read        | Parse schema from a json file on disk. And tries to read PAT from .env file. |
 
 ## 🤝 Contributing
 
