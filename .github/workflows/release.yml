@@ -91,7 +91,8 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
-          path: artifacts
+          path: ./artifacts
+          merge-multiple: true
       
       - name: Create Release
         uses: softprops/action-gh-release@v2
