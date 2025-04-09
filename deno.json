@@ -1,9 +1,14 @@
 {
   "tasks": {
-    "dev": "deno run --watch main.ts"
+    "compile-types": "deno run --allow-read --allow-write --allow-env --allow-sys npm:json-schema-to-typescript -i ./utils/schemas/field_json_schema.json --output ./utils/types/field.d.ts",
+    "compile-cli":"deno compile -o ./dist/airtable-devops --allow-read --allow-write --allow-env --allow-net ./main.ts"
   },
   "imports": {
+    "@cliffy/ansi": "jsr:@cliffy/ansi@^1.0.0-rc.7",
     "@cliffy/command": "jsr:@cliffy/command@^1.0.0-rc.7",
-    "@std/assert": "jsr:@std/assert@1"
+    "@std/assert": "jsr:@std/assert@1",
+    "@std/dotenv": "jsr:@std/dotenv@^0.225.3",
+    "@std/path": "jsr:@std/path@^1.0.8",
+    "ajv": "npm:ajv@^8.17.1"
   }
 }

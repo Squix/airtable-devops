@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://squixtech.com/schemas/airtable-base-schema",
+  "title": "Base",
+  "description": "An airtable base with its tables.",
+  "$comment": "This schema is based on airtable.com/developers/web/api/create-base. Descriptions have been updated because we are not only in the new base creation context.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Base ID, a unique identifier for a base.",
+      "readOnly": true
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the base."
+    },
+    "workspaceId": {
+      "type": "string",
+      "description": "The workspace which the base belongs to."
+    },
+    "tables": {
+      "type": "array",
+      "description": "A list of JSON objects representing the tables of the base.",
+      "items": {
+        "$ref": "https://squixtech.com/schemas/airtable-table-schema"
+      }
+    }
+  },
+  "required": ["id", "tables"]
+}
