@@ -62,7 +62,7 @@ The tool will automatically load the PAT from your `.env` file if present. If no
 Generate schema files representing the structure of an Airtable base.
 
 ```sh
-deno run --allow-read --allow-net --allow-env --allow-write main.ts get-schema --base-id <your_base_id> --output-dir <output_directory>
+./airtable-devops get-schema --base-id <your_base_id> --output-dir <output_directory>
 ```
 
 - `--base-id` (required): The base ID to get the schema from.
@@ -73,7 +73,7 @@ Created schema files names follow this format : `{baseId}_schema_{currentISOdate
 Example:
 
 ```sh
-deno run --allow-net --allow-env [--env-file] --allow-write main.ts get-schema --base-id app1234567890 --output-dir ./schemas/
+./airtable-devops get-schema --base-id app1234567890 --output-dir ./schemas/
 ```
 
 #### ✅ Validate schema
@@ -81,14 +81,14 @@ deno run --allow-net --allow-env [--env-file] --allow-write main.ts get-schema -
 Validate a schema file to ensure it follows the correct structure for an Airtable base.
 
 ```sh
-deno run --allow-read main.ts validate --file <path_to_schema_file>
+./airtable-devops validate --file <path_to_schema_file>
 ```
 
 - `--file` (required): The path to the schema file to validate.
 
 Example:
 ```sh
-deno run --allow-read main.ts validate --file ./schemas/base_schema.json
+./airtable-devops validate --file ./schemas/base_schema.json
 ```
 
 The command will provide detailed error messages if the schema is invalid, showing exactly what needs to be fixed and where.
@@ -98,7 +98,7 @@ The command will provide detailed error messages if the schema is invalid, showi
 Compare two schema files and show structural changes in a human-readable format.
 
 ```sh
-deno run --allow-read main.ts diff --old <old_schema_file> --new <new_schema_file> [--format <format>] [--color]
+./airtable-devops diff --old <old_schema_file> --new <new_schema_file> [--format <format>] [--color]
 ```
 
 - `--old` (required): Path to the old schema file.
@@ -108,7 +108,7 @@ deno run --allow-read main.ts diff --old <old_schema_file> --new <new_schema_fil
 
 Example:
 ```sh
-deno run --allow-read main.ts diff --old ./schemas/base_schema_v1.json --new ./schemas/base_schema_v2.json
+./airtable-devops diff --old ./schemas/base_schema_v1.json --new ./schemas/base_schema_v2.json
 ```
 
 The command will show a human-readable diff of the changes between the two schema files, including:
