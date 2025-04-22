@@ -1,12 +1,57 @@
 # 🪄 Airtable DevOps Tools
 
-A set of DevOps tools for managing Airtable bases using the command line. The main idea is to track structure changes (like deleting a field in a table) with version control like Git.
+A set of DevOps tools for managing Airtable bases using the command line. This tool helps you maintain multiple environments (ex. development and production) for your Airtable bases and track structural changes (like deleting a field in a table) using version control.
+
+## 🎯 Use cases
+
+### 1. Multiple environments for your base
+- Maintain separate development and production environments
+- Safely test changes in development before deploying to production
+- Know what to edit in production to reflect developement changes
+
+### 2. Version control for your base structure
+- Maintain a history of your base's evolution
+- Review and understand schema modifications through clear diffs
+- Collaborate with team members on schema changes
 
 ## ✨ Features
 
 - 🔎 Generate schema files representing the structure of Airtable bases.
 - ✅ Validate schema files to ensure they follow the correct structure used by this CLI.
 - 📋 Compare two schema files to see structural changes in a human-readable format.
+
+## ⚡ Quick start
+
+### Setting up multiple environments
+
+1. Duplicate your existing base
+2. Decide which one will be the **Production** and **Development** base
+3. Create a folder on your computer for each one
+4. [Install](#-installation) the CLI
+5. Move it to a folder with an env file to [setup your Airtable PAT](#setting-up-airtable-pat)
+4. Get the schema for both bases:
+   ```sh
+   # Get development base schema
+   ./airtable-devops get-schema -b <development_base_id> -o ./myBase/dev
+   
+   # Get production base schema
+   ./airtable-devops get-schema -b <production_base_id> -o ./myBase/prod
+   ```
+5. Make changes on your **Development** base
+
+### Deployment workflow
+
+1. Before deploying changes to production, generate a diff of your changes:
+   ```sh
+   ./airtable-devops diff --old ./myBase/prod/appXXXXXX_schema_LAST_TIMESTAMP.json --new ./myBase/dev/appXXXXXX_schema_LAST_TIMESTAMP.json > ./myBase/deployments/vX.X.txt
+   ```
+
+2. Make the changes listed in `deployments/vX.X.txt` on your **Production** base
+
+3. After deploying to production, update your **Production** base schema:
+   ```sh
+   ./airtable-devops get-schema -b <production_base_id> -o ./myBase/prod
+   ```
 
 ## 📦 Installation
 
