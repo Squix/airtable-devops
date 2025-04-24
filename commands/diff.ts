@@ -121,10 +121,6 @@ export async function diff(options: { old: string, new: string, format: string, 
     return schema.tables.find(table => table.id === id);
   }
   
-  function findFieldById(table: Table, id: string): Field | undefined {
-    return table.fields.find(field => field.id === id);
-  }
-  
   function compareFieldSets(oldFields: Field[], newFields: Field[]): {
     created: Field[];
     updated: { old: Field; new: Field }[];
