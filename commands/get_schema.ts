@@ -24,7 +24,7 @@ export const get_schema_command = new Command()
   )
   .option(
     "-f, --file-path <file:string>",
-    "The path to save the schema file. Default is './output/schema.json'.",
+    "The absolute path to save the schema file. Default is './output/schema.json'.",
     { default: "./output/schema.json", conflicts: ["output-dir"] }
   )
   .action(getSchema);
