@@ -6,7 +6,7 @@ import { dirname, join } from "@std/path";
 //get-schema command
 export const get_schema_command = new Command()
   .description(
-    "Generate schema files representing the structure of an Airtable base."
+    "Create a schema file representing the structure of a given Airtable base."
   )
   .env(
     "AIRTABLE_PAT=<value:string>",
