@@ -2,6 +2,7 @@ import { load } from "@std/dotenv";
 import { Command } from "@cliffy/command";
 import { AIRTABLE_API_ENDPOINTS, bindEndpointsParams, log } from "../main.ts";
 import { dirname, join } from "@std/path";
+import { Table } from "../utils/types/table.d.ts";
 
 //get-schema command
 export const get_schema_command = new Command()
@@ -66,7 +67,7 @@ async function getSchema(options: { baseId: unknown; outputDir?: string; file: s
     const remote_base_schema = await remote_base_schema_response.json();
 
     //strip views from schema
-    const tables = remote_base_schema.tables.map((table: any) => {
+    const tables = remote_base_schema.tables.map((table: Table) => {
       delete table.views;
       return table;
     });
