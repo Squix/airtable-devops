@@ -19,13 +19,18 @@ export const get_schema_command = new Command()
   )
   .option(
     "-o, --output-dir <file:string>",
-    "The directory to save the schema file. Default is './output/'.",
-    { default: "./output/" }
+    "The directory where to save the schema file. Using this option will name the file with the following format: <baseId>_schema_<timestamp>.json. Default is './output/'.",
+    { conflicts: ["file-path"] }
+  )
+  .option(
+    "-f, --file-path <file:string>",
+    "The path to save the schema file. Default is './output/schema.json'.",
+    { default: "./output/schema.json", conflicts: ["output-dir"] }
   )
   .action(getSchema);
 
 //main command function
-async function getSchema(options: { baseId: unknown; outputDir: string; airtablePat?: string   }) {
+async function getSchema(options: { baseId: unknown; outputDir?: string; filePath: string; airtablePat?: string   }) {
   //Airtable PAT is mandatory for this command
   const PAT = await load_PAT_from_env(options.airtablePat);
   if (!PAT) {
@@ -69,17 +74,20 @@ async function getSchema(options: { baseId: unknown; outputDir: string; airtable
     const schema = { id: params.baseId, tables };
 
     //ensure output path ends with /
-    if (!options.outputDir.endsWith("/")) {
+    if (options.outputDir && !options.outputDir.endsWith("/")) {
       options.outputDir += "/";
     }
 
+
+
     //write schema to file
     const now = new Date();
-    const schema_file_path = join(
-      `${options.outputDir}${options.baseId}_schema_${now
+
+    const schema_file_path = options.outputDir ? join(options.outputDir, `${options.baseId}_schema_${now
         .toISOString()
-        .replace(/[:.]/g, "-")}.json`
-    ); //replace : and . with - to avoid issues with file names
+        .replace(/[:.]/g, "-")}.json`) //replace : and . with - to avoid issues with file names
+        
+        : options.filePath; 
 
     // Ensure the directory exists
     await Deno.mkdir(dirname(schema_file_path), { recursive: true });
