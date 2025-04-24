@@ -23,14 +23,14 @@ export const get_schema_command = new Command()
     { conflicts: ["file-path"] }
   )
   .option(
-    "-f, --file-path <file:string>",
+    "-f, --file <file:string>",
     "The absolute path to save the schema file. Default is './output/schema.json'.",
     { default: "./output/schema.json", conflicts: ["output-dir"] }
   )
   .action(getSchema);
 
 //main command function
-async function getSchema(options: { baseId: unknown; outputDir?: string; filePath: string; airtablePat?: string   }) {
+async function getSchema(options: { baseId: unknown; outputDir?: string; file: string; airtablePat?: string   }) {
   //Airtable PAT is mandatory for this command
   const PAT = await load_PAT_from_env(options.airtablePat);
   if (!PAT) {
@@ -87,7 +87,7 @@ async function getSchema(options: { baseId: unknown; outputDir?: string; filePat
         .toISOString()
         .replace(/[:.]/g, "-")}.json`) //replace : and . with - to avoid issues with file names
         
-        : options.filePath; 
+        : options.file; 
 
     // Ensure the directory exists
     await Deno.mkdir(dirname(schema_file_path), { recursive: true });
