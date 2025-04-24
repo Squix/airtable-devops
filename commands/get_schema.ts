@@ -97,8 +97,12 @@ async function getSchema(options: { baseId: unknown; outputDir?: string; filePat
     log.success(
       `Schema of base ${params.baseId} saved to: ${schema_file_path}.`
     );
-  } catch (error: any) {
-    throw new Error("Error getting schema: " + error.message);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error("Error getting schema: " + error.message);
+    } else {
+      throw new Error("Error getting schema: " + error);
+    }
   }
 }
 async function load_PAT_from_env(shell_PAT?: string) {
