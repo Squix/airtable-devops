@@ -41,7 +41,10 @@ async function main() {
     //main command
     .name("airtable-devops")
     .version(VERSION)
-    .description("🪄  DevOps tools for Airtable.")
+    .description(`
+      🪄  Airtable DevOps Tools
+      --
+      A set of DevOps tools for managing Airtable bases using the command line.`)
 
     //custom types available for all subcommands
     .globalType("AirtableBaseId", (valueToTest: { value: string }) => {

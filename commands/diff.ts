@@ -3,6 +3,7 @@ import { log } from "../main.ts";
 import { colors } from "@cliffy/ansi/colors";
 import { validateSchema, formatValidationErrors } from "./validate.ts";
 import type { Field } from "../utils/types/field.d.ts";
+import { Table } from "../utils/types/table.d.ts";
 
 
 
@@ -86,11 +87,6 @@ export async function diff(options: { old: string, new: string, format: string, 
 }
 
   // Types for schema comparison
-interface Table {
-    id: string;
-    name: string;
-    fields: Field[];
-  }
   
   interface Base {
     id: string;
@@ -123,10 +119,6 @@ interface Table {
   // Helper functions for comparing schemas
   function findTableById(schema: Base, id: string): Table | undefined {
     return schema.tables.find(table => table.id === id);
-  }
-  
-  function findFieldById(table: Table, id: string): Field | undefined {
-    return table.fields.find(field => field.id === id);
   }
   
   function compareFieldSets(oldFields: Field[], newFields: Field[]): {

@@ -2,11 +2,12 @@ import { load } from "@std/dotenv";
 import { Command } from "@cliffy/command";
 import { AIRTABLE_API_ENDPOINTS, bindEndpointsParams, log } from "../main.ts";
 import { dirname, join } from "@std/path";
+import { Table } from "../utils/types/table.d.ts";
 
 //get-schema command
 export const get_schema_command = new Command()
   .description(
-    "Generate schema files representing the structure of an Airtable base."
+    "Create a schema file representing the structure of a given Airtable base."
   )
   .env(
     "AIRTABLE_PAT=<value:string>",
@@ -19,13 +20,18 @@ export const get_schema_command = new Command()
   )
   .option(
     "-o, --output-dir <file:string>",
-    "The directory to save the schema file. Default is './output/'.",
-    { default: "./output/" }
+    "The directory where to save the schema file. Using this option will name the file with the following format: <baseId>_schema_<timestamp>.json. Default is './output/'.",
+    { conflicts: ["file-path"] }
+  )
+  .option(
+    "-f, --file <file:string>",
+    "The absolute path to save the schema file. Default is './output/schema.json'.",
+    { default: "./output/schema.json", conflicts: ["output-dir"] }
   )
   .action(getSchema);
 
 //main command function
-async function getSchema(options: { baseId: unknown; outputDir: string; airtablePat?: string   }) {
+async function getSchema(options: { baseId: unknown; outputDir?: string; file: string; airtablePat?: string   }) {
   //Airtable PAT is mandatory for this command
   const PAT = await load_PAT_from_env(options.airtablePat);
   if (!PAT) {
@@ -61,7 +67,7 @@ async function getSchema(options: { baseId: unknown; outputDir: string; airtable
     const remote_base_schema = await remote_base_schema_response.json();
 
     //strip views from schema
-    const tables = remote_base_schema.tables.map((table: any) => {
+    const tables = remote_base_schema.tables.map((table: Table) => {
       delete table.views;
       return table;
     });
@@ -69,17 +75,20 @@ async function getSchema(options: { baseId: unknown; outputDir: string; airtable
     const schema = { id: params.baseId, tables };
 
     //ensure output path ends with /
-    if (!options.outputDir.endsWith("/")) {
+    if (options.outputDir && !options.outputDir.endsWith("/")) {
       options.outputDir += "/";
     }
 
+
+
     //write schema to file
     const now = new Date();
-    const schema_file_path = join(
-      `${options.outputDir}${options.baseId}_schema_${now
+
+    const schema_file_path = options.outputDir ? join(options.outputDir, `${options.baseId}_schema_${now
         .toISOString()
-        .replace(/[:.]/g, "-")}.json`
-    ); //replace : and . with - to avoid issues with file names
+        .replace(/[:.]/g, "-")}.json`) //replace : and . with - to avoid issues with file names
+        
+        : options.file; 
 
     // Ensure the directory exists
     await Deno.mkdir(dirname(schema_file_path), { recursive: true });
@@ -89,8 +98,12 @@ async function getSchema(options: { baseId: unknown; outputDir: string; airtable
     log.success(
       `Schema of base ${params.baseId} saved to: ${schema_file_path}.`
     );
-  } catch (error: any) {
-    throw new Error("Error getting schema: " + error.message);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error("Error getting schema: " + error.message);
+    } else {
+      throw new Error("Error getting schema: " + error);
+    }
   }
 }
 async function load_PAT_from_env(shell_PAT?: string) {

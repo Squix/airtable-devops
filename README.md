@@ -32,10 +32,10 @@ A set of DevOps tools for managing Airtable bases using the command line. This t
 4. Get the schema for both bases:
    ```sh
    # Get development base schema
-   ./airtable-devops get-schema -b <development_base_id> -o ./myBase/dev
+   ./airtable-devops get-schema -b <development_base_id> -f ./myBase/dev/schema.json
    
    # Get production base schema
-   ./airtable-devops get-schema -b <production_base_id> -o ./myBase/prod
+   ./airtable-devops get-schema -b <production_base_id> -f ./myBase/prod/schema.json
    ```
 5. Make changes on your **Development** base
 
@@ -43,14 +43,14 @@ A set of DevOps tools for managing Airtable bases using the command line. This t
 
 1. Before deploying changes to production, generate a diff of your changes:
    ```sh
-   ./airtable-devops diff --old ./myBase/prod/appXXXXXX_schema_LAST_TIMESTAMP.json --new ./myBase/dev/appXXXXXX_schema_LAST_TIMESTAMP.json > ./myBase/deployments/vX.X.txt
+   ./airtable-devops diff --old ./myBase/prod/schema.json --new ./myBase/dev/schema.json > ./myBase/deployments/vX.X.txt
    ```
 
 2. Make the changes listed in `deployments/vX.X.txt` on your **Production** base
 
 3. After deploying to production, update your **Production** base schema:
    ```sh
-   ./airtable-devops get-schema -b <production_base_id> -o ./myBase/prod
+   ./airtable-devops get-schema -b <production_base_id> --old ./myBase/prod/schema.json
    ```
 
 ## 📦 Installation
@@ -107,17 +107,22 @@ The tool will automatically load the PAT from your `.env` file if present. If no
 Generate schema files representing the structure of an Airtable base.
 
 ```sh
-./airtable-devops get-schema --base-id <your_base_id> --output-dir <output_directory>
+./airtable-devops get-schema --base-id <your_base_id> [--file <output_file> | --output-dir <output_directory>]
 ```
 
 - `--base-id` (required): The base ID to get the schema from.
-- `--output-dir` (optional): The directory to save the schema file. Default is `./output/`.
+- `--file` (recommended): The file path where to save the schema. Ideal for version control as it can overwrites the same file.
+- `--output-dir` (optional): The directory to save the schema file. Will create a new file each time. Default is `./output/`.
 
-Created schema files names follow this format : `{baseId}_schema_{currentISOdate}.json`
+When using `--output-dir`, created schema files names follow this format : `{baseId}_schema_{currentISOdate}.json`
 
 Example:
 
 ```sh
+# Using --file (recommended for version control)
+./airtable-devops get-schema --base-id app1234567890 --file ./schemas/my_base_schema.json
+
+# Using --output-dir (creates timestamped files)
 ./airtable-devops get-schema --base-id app1234567890 --output-dir ./schemas/
 ```
 
@@ -138,7 +143,7 @@ Example:
 
 The command will provide detailed error messages if the schema is invalid, showing exactly what needs to be fixed and where.
 
-#### 📋 Diff schema
+#### 📋 Compare schemas
 
 Compare two schema files and show structural changes in a human-readable format.
 
@@ -163,7 +168,7 @@ The command will show a human-readable diff of the changes between the two schem
 
 Example output:
 ```
-Base: app123456
+Base: app1234567890
 
 + Projects (NEW TABLE)
   + Name (single_line_text)
@@ -187,10 +192,10 @@ If you're running the tool directly with Deno, you'll need to include the approp
 
 ```sh
 # Get Schema command
-deno run --allow-net --allow-env --allow-write --allow-read main.ts get-schema --base-id <your_base_id> --output-dir <output_directory>
+deno run --allow-net --allow-env --allow-write --allow-read main.ts get-schema --base-id <your_base_id> [--file <output_file> | --output-dir <output_directory>]
 
 # Validate Schema command
-deno run --allow-read main.ts validate --file <path_to_schema_file>
+deno run --allow-read main.ts validate --file <output_file>
 
 # Diff Schema command
 deno run --allow-read main.ts diff --old <old_schema_file> --new <new_schema_file> [--format <format>] [--color]
