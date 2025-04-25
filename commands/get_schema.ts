@@ -21,7 +21,7 @@ export const get_schema_command = new Command()
   .option(
     "-o, --output-dir <file:string>",
     "The directory where to save the schema file. Using this option will name the file with the following format: <baseId>_schema_<timestamp>.json. Default is './output/'.",
-    { conflicts: ["file-path"] }
+    { conflicts: ["file"] }
   )
   .option(
     "-f, --file <file:string>",
