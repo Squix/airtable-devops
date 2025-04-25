@@ -3,6 +3,7 @@ import { Command } from "@cliffy/command";
 import { AIRTABLE_API_ENDPOINTS, bindEndpointsParams, log } from "../main.ts";
 import { dirname, join } from "@std/path";
 import { Table } from "../utils/types/table.d.ts";
+import { Field } from "../utils/types/field.d.ts";
 
 //get-schema command
 export const get_schema_command = new Command()
@@ -66,11 +67,14 @@ async function getSchema(options: { baseId: unknown; outputDir?: string; file: s
 
     const remote_base_schema = await remote_base_schema_response.json();
 
-    //strip views from schema
-    const tables = remote_base_schema.tables.map((table: Table) => {
-      delete table.views;
-      return table;
-    });
+    //strip views from schema and sort tables and fields by ID
+    const tables = remote_base_schema.tables
+      .map((table: Table) => {
+        delete table.views;
+        table.fields.sort((a: Field, b: Field) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
+        return table;
+      })
+      .sort((a: Table, b: Table) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
 
     const schema = { id: params.baseId, tables };
 
