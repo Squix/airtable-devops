@@ -37,7 +37,18 @@ A set of DevOps tools for managing Airtable bases using the command line. This t
    # Get production base schema
    ./airtable-devops get-schema -b <production_base_id> -f ./myBase/prod/schema.json
    ```
-5. Make changes on your **Development** base
+5. You should have this directory setup :
+<pre>
+├── airtable-devops(.exe)
+├── .env
+└── myBase
+    ├── dev
+    │   └── schema.json
+    └── prod
+        └── schema.json
+</pre>
+
+6. Make changes on your **Development** base
 
 ### Deployment workflow
 
@@ -50,7 +61,7 @@ A set of DevOps tools for managing Airtable bases using the command line. This t
 
 3. After deploying to production, update your **Production** base schema:
    ```sh
-   ./airtable-devops get-schema -b <production_base_id> --old ./myBase/prod/schema.json
+   ./airtable-devops get-schema -b <production_base_id> -f ./myBase/prod/schema.json
    ```
 
 ## 📦 Installation
@@ -84,7 +95,7 @@ The *get-schema* command requires to interact with the Airtable API, hence you n
 
 You can provide your PAT in one of two ways:
 
-1. Using a `.env` file in your project root (recommended):
+1. Using a `.env` file in your project root with this content (recommended):
    ```sh
    AIRTABLE_PAT=your_airtable_pat
    ```
