@@ -220,6 +220,10 @@ Breakdown of needed Deno permissions:
 | --allow-write       | Write schema to a json file on disk.   |
 | --allow-read        | Parse schema from a json file on disk. And tries to read PAT from .env file. |
 
+## 📖 The logbook
+Why making this? What was the journey to v1?
+All is related here: [indieforge.build/project/airtable_devops](https://indieforge.build/project/airtable_devops)
+
 ## 🤝 Contributing
 
 Contributions are welcome! Please open an issue first for any improvements or bug fixes.
