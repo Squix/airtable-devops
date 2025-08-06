@@ -63,8 +63,8 @@ export async function diff(options: {
     let newSchemaText: string;
 
     if (options.git) {
-       oldSchemaText = await gitShow(options.old, options.trackedFile!);
-        newSchemaText = await gitShow(options.new, options.trackedFile!);
+      oldSchemaText = await gitShow(options.old, options.trackedFile!);
+      newSchemaText = await gitShow(options.new, options.trackedFile!);
 
     } else {
       // Read and parse both schema files
@@ -172,7 +172,8 @@ interface TableDiff {
 }
 
 interface SchemaDiff {
-  baseId: string;
+  old_baseId: string;
+  new_baseId: string;
   tables: {
     created: Table[];
     updated: TableDiff[];
@@ -266,7 +267,8 @@ function compareSchemas(oldSchema: Base, newSchema: Base): SchemaDiff {
   });
 
   return {
-    baseId: newSchema.id,
+    old_baseId: oldSchema.id,
+    new_baseId: newSchema.id,
     tables: {
       created: tableDiffs.created,
       updated: updatedTables,
@@ -394,7 +396,7 @@ function formatTableDiff(tableDiff: TableDiff): string {
 }
 
 function formatSchemaDiff(diff: SchemaDiff): string {
-  let output = `Base: ${diff.baseId}\n\n`;
+  let output = `Base: \n  old: ${diff.old_baseId}\n  new: ${diff.new_baseId}\n\n`;
 
   // Format created tables
   for (const table of diff.tables.created) {
