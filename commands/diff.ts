@@ -142,7 +142,7 @@ async function gitShow(commit: string, trackedFile: string): Promise<string> {
 
     if (code !== 0) {
         throw new Error(
-            `Failed to retrieve file from git commit ${commit}. Ensure the commit exists and contains the specified file. Git output: ${new TextDecoder().decode(
+            `Failed to retrieve file from git commit ${commit}.\n- Ensure the commit exists and contains the specified file.\n- Ensure you gave the full path to the file, and not just the git repository directory. Git output: ${new TextDecoder().decode(
                 stderr
             )}`
         );
