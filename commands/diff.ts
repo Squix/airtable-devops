@@ -10,14 +10,19 @@ import { Table } from "../utils/types/table.d.ts";
 // Export the diff command
 export const diff_schema_command = new Command()
   .description("Compare two schema files and show structural changes in a human-readable format.")
+  .option (
+    "-g, --git",
+    "Use git commits ids for old and new schemas files",
+    {default:false}
+  )
   .option(
     "-o, --old <file:string>",
-    "Path to the old schema file",
+    "Path to the older schema file. Older commit id if --git is used",
     { required: true }
   )
   .option(
     "-n, --new <file:string>",
-    "Path to the new schema file",
+    "Path to the newer schema file. Newer commit id if --git is used",
     { required: true }
   )
   .option(
