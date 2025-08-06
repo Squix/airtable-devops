@@ -8,14 +8,19 @@ import { log } from "../main.ts";
 
 // Function to format validation errors in a user-friendly way
 export function formatValidationErrors(errors: ErrorObject[]): string {
+  console.log("Validation errors:", JSON.stringify(errors));
   return errors.map(error => {
-    const path = error.instancePath ? ` at ${error.instancePath}` : '';
-    const message = error.message;
-    const details = error.params ? ` (${Object.entries(error.params)
+    const path = error.instancePath;
+    const message = error.message ?? "unknown error";
+    const schemaPath = error.schemaPath.replace("https://squixtech.com/schemas/", "");
+
+    const details = `(${Object.entries(error.params)
       .map(([key, value]) => `${key}: ${value}`)
-      .join(', ')})` : '';
+      .join(', ')})`
+
+      return `- Path: ${path}\n  Reference schema: ${schemaPath}\n   Object ${error.data ? "with value "+JSON.stringify(error.data) : ""} ${message}. Details: ${details}.`;
+
     
-    return `❌ ${message}${path}${details}`;
   }).join('\n');
 }
 
