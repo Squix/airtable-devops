@@ -115,11 +115,10 @@ export async function diff(options: {
     console.log(output);
   } catch (error) {
     if (error instanceof Error) {
-      log.error(`Error comparing schemas: ${error.message}`);
+      throw new Error("Error getting schema: " + error.message);
     } else {
-      log.error("An unknown error occurred while comparing schemas");
+      throw new Error("Error getting schema: " + error);
     }
-    throw error;
   }
 }
 
