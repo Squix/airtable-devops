@@ -9,7 +9,7 @@ import { dirname, basename } from "@std/path";
 // Export the diff command
 export const diff_schema_command = new Command()
   .description(
-    "Compare two schema files and show structural changes in a human-readable format."
+    "Compare two schema files/versions and show structural changes in a human-readable format."
   )
   .option("-g, --git", "Use git branches/commits for old and new schemas files", {
     depends: ["tracked-file"],
