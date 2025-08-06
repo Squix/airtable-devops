@@ -11,7 +11,7 @@ export const diff_schema_command = new Command()
   .description(
     "Compare two schema files and show structural changes in a human-readable format."
   )
-  .option("-g, --git", "Use git commits ids for old and new schemas files", {
+  .option("-g, --git", "Use git branches/commits for old and new schemas files", {
     depends: ["tracked-file"],
   })
   .option(
@@ -23,12 +23,12 @@ export const diff_schema_command = new Command()
   )
   .option(
     "-o, --old <file:string>",
-    "Path to the older schema file. Older commit id if --git is used",
+    "Path to the older schema file. Older branch/commit if --git is used",
     { required: true }
   )
   .option(
     "-n, --new <file:string>",
-    "Path to the newer schema file. Newer commit id if --git is used",
+    "Path to the newer schema file. Newer branch/commit if --git is used",
     { required: true }
   )
   .option("--format <format:string>", "Output format (text, json)", {
