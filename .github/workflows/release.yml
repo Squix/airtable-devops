@@ -85,7 +85,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     # Only create release when triggered by a tag on main or manual trigger
-    if: (github.ref_type == 'tag' && github.ref_name == 'main') || github.event_name == 'workflow_dispatch'
+    if: (github.ref_type == 'tag' && startsWith(github.ref, 'refs/tags/v')) || github.event_name == 'workflow_dispatch'
     
     steps:
       - name: Download all artifacts
