@@ -8,7 +8,6 @@ import { log } from "../main.ts";
 
 // Function to format validation errors in a user-friendly way
 export function formatValidationErrors(errors: ErrorObject[]): string {
-  console.log("Validation errors:", JSON.stringify(errors));
   return errors.map(error => {
     const path = error.instancePath;
     const message = error.message ?? "unknown error";
