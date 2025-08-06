@@ -1,7 +1,7 @@
 {
   "tasks": {
     "compile-types": "deno run --allow-read --allow-write --allow-env --allow-sys npm:json-schema-to-typescript -i ./utils/schemas/field_json_schema.json --output ./utils/types/field.d.ts",
-    "compile-cli":"deno compile -o ./dist/airtable-devops --allow-read --allow-write --allow-env --allow-net ./main.ts"
+    "compile-cli":"deno compile -o ./dist/airtable-devops --allow-read --allow-write --allow-env --allow-net --allow-run ./main.ts"
   },
   "imports": {
     "@cliffy/ansi": "jsr:@cliffy/ansi@^1.0.0-rc.7",
