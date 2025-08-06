@@ -24,7 +24,7 @@ export interface Field {
     | "createdTime"
     | "lastModifiedTime"
     | "singleSelect"
-    | "multipleSelect"
+    | "multipleSelects"
     | "singleCollaborator"
     | "multipleCollaborators"
     | "multipleAttachments"
