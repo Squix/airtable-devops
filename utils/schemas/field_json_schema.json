@@ -26,7 +26,7 @@
         "createdTime",
         "lastModifiedTime",
         "singleSelect",
-        "multipleSelect",
+        "multipleSelects",
         "singleCollaborator",
         "multipleCollaborators",
         "multipleAttachments",
