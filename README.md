@@ -122,7 +122,7 @@ Generate schema files representing the structure of an Airtable base.
 ```
 
 - `--base-id` (required): The base ID to get the schema from.
-- `--file` (recommended): The file path where to save the schema. Ideal for version control as it can overwrites the same file.
+- `--file` (recommended): The file path where to save the schema. Ideal for version control as it can overwrite the same file.
 - `--output-dir` (optional): The directory to save the schema file. Will create a new file each time. Default is `./output/`.
 
 When using `--output-dir`, created schema files names follow this format : `{baseId}_schema_{currentISOdate}.json`
@@ -156,20 +156,31 @@ The command will provide detailed error messages if the schema is invalid, showi
 
 #### 📋 Compare schemas
 
-Compare two schema files and show structural changes in a human-readable format.
+Compare two schema files/versions and show structural changes in a human-readable format.
 
 ```sh
+# Comparing two distinct files
 ./airtable-devops diff --old <old_schema_file> --new <new_schema_file> [--format <format>] [--color]
+
+# Comparing two versions of the same file with Git
+./airtable-devops diff --git --old <old_schema_branch_or_commit> --new <new_schema_branch_or_commit> --tracked-file <schema_file> [--format <format>] [--color]
 ```
 
-- `--old` (required): Path to the old schema file.
-- `--new` (required): Path to the new schema file.
+- `--old` (required): Path to the old schema file. Older branch/commit if --git is used.
+- `--new` (required): Path to the new schema file. Older branch/commit if --git is used.
+- `--git` (optional, needed when `tracked-file` is used): Use git branches/commits for old and new schemas files
+- `--tracked-file` (optional, needed when `git` is used): Path to the schema file inside a git repository.
 - `--format` (optional): Output format (text, json). Default is "text".
 - `--color` (optional): Use colors in the output. Default is true.
 
 Example:
+
 ```sh
+# Comparing two distinct files
 ./airtable-devops diff --old ./schemas/base_schema_v1.json --new ./schemas/base_schema_v2.json
+
+# Comparing two versions of the same file (between main and dev Git branches)
+./airtable-devops diff --git --tracked-file "./schemas/base_schema.json" --old main --new dev
 ```
 
 The command will show a human-readable diff of the changes between the two schema files, including:
@@ -209,7 +220,7 @@ deno run --allow-net --allow-env --allow-write --allow-read main.ts get-schema -
 deno run --allow-read main.ts validate --file <output_file>
 
 # Diff Schema command
-deno run --allow-read main.ts diff --old <old_schema_file> --new <new_schema_file> [--format <format>] [--color]
+deno run --allow-read [--allow-run] main.ts diff --old <old_schema_file> --new <new_schema_file> [--format <format>] [--color] [--git] [--tracked-file <schema_file>]
 ```
 
 Breakdown of needed Deno permissions:
@@ -219,6 +230,7 @@ Breakdown of needed Deno permissions:
 | --allow-env         | Load Airtable PAT from environment.    |
 | --allow-write       | Write schema to a json file on disk.   |
 | --allow-read        | Parse schema from a json file on disk. And tries to read PAT from .env file. |
+| --allow-run         | Allow usage of Git commands. |
 
 ## 📖 The logbook
 Why making this? What was the journey to v1?
