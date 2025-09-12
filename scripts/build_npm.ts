@@ -7,16 +7,20 @@ const OUTPUT_DIR = "./dist/npm";
 await emptyDir(OUTPUT_DIR);
 
 await build({
-  entryPoints: ["./main.ts"],
+  entryPoints: [
+    {
+      kind: "bin",
+      name: "airtable-devops", // command name
+      path: "./main.ts",
+    },
+  ],
   outDir: OUTPUT_DIR,
   shims: {
     // see JS docs for overview and more options
     deno: true,
   },
   filterDiagnostic(diagnostic) {
-    if (
-      diagnostic.file?.fileName.endsWith("deno_command_node_polyfill.ts")
-    ) {
+    if (diagnostic.file?.fileName.endsWith("deno_command_node_polyfill.ts")) {
       return false; // ignore all diagnostics in this file
     }
     // etc... more checks here
