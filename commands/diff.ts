@@ -5,6 +5,7 @@ import { validateSchema, formatValidationErrors } from "./validate.ts";
 import type { Field } from "../utils/types/field.d.ts";
 import { Table } from "../utils/types/table.d.ts";
 import { dirname, basename } from "@std/path";
+import { runCommand } from "../utils/deno_command_node_polyfill.ts";
 
 // Export the diff command
 export const diff_schema_command = new Command()
@@ -48,9 +49,8 @@ export async function diff(options: {
   if (options.git) {
     //verify that git is installed
 
-    const isGitInstalled = new Deno.Command("git", { args: ["--version"] });
     try {
-      await isGitInstalled.output();
+      await runCommand("git", { args: ["--version"] });
     } catch (_error) {
       throw new Error(
         "Git is not installed or not found in the PATH. Please install Git to use the --git flag."
@@ -127,7 +127,7 @@ async function gitShow(commit: string, trackedFile: string): Promise<string> {
     const trackedFileDir = dirname(trackedFile);
     const trackedFileBasename = basename(trackedFile);
 
-    const command = new Deno.Command("git", {
+    const { code, stdout, stderr } = await runCommand("git", {
         args: [
             "-C",
             trackedFileDir,
@@ -136,8 +136,6 @@ async function gitShow(commit: string, trackedFile: string): Promise<string> {
             "--oneline",
         ],
     });
-
-    const { code, stdout, stderr } = await command.output();
 
     if (code !== 0) {
         throw new Error(

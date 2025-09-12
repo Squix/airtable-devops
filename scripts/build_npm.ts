@@ -13,6 +13,15 @@ await build({
     // see JS docs for overview and more options
     deno: true,
   },
+  filterDiagnostic(diagnostic) {
+    if (
+      diagnostic.file?.fileName.endsWith("deno_command_node_polyfill.ts")
+    ) {
+      return false; // ignore all diagnostics in this file
+    }
+    // etc... more checks here
+    return true;
+  },
   package: {
     // package.json properties
     name: "airtable-devops",
