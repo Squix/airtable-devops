@@ -65,7 +65,9 @@ async function getSchema(options: { baseId: unknown; outputDir?: string; file: s
       );
     }
 
-    const remote_base_schema = await remote_base_schema_response.json();
+    type AirtableAPIgetSchemaResponse = {"tables":Table[]}
+
+    const remote_base_schema : AirtableAPIgetSchemaResponse = await remote_base_schema_response.json();
 
     //strip views from schema and sort tables and fields by ID
     const tables = remote_base_schema.tables
