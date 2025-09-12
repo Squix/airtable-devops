@@ -32,7 +32,12 @@ export const get_schema_command = new Command()
   .action(getSchema);
 
 //main command function
-async function getSchema(options: { baseId: unknown; outputDir?: string; file: string; airtablePat?: string   }) {
+async function getSchema(options: {
+  baseId: unknown;
+  outputDir?: string;
+  file: string;
+  airtablePat?: string;
+}) {
   //Airtable PAT is mandatory for this command
   const PAT = await load_PAT_from_env(options.airtablePat);
   if (!PAT) {
@@ -58,25 +63,28 @@ async function getSchema(options: { baseId: unknown; outputDir?: string; file: s
         "Invalid Airtable Personal Access Token. Please check your PAT."
       );
     }
-    
+
     if (remote_base_schema_response.status === 404) {
       throw new Error(
         "base id does not exists or the provided PAT does not have access to it."
       );
     }
 
-    type AirtableAPIgetSchemaResponse = {"tables":Table[]}
+    type AirtableAPIgetSchemaResponse = { tables: Table[] };
 
-    const remote_base_schema : AirtableAPIgetSchemaResponse = await remote_base_schema_response.json();
+    const remote_base_schema: AirtableAPIgetSchemaResponse =
+      (await remote_base_schema_response.json()) as AirtableAPIgetSchemaResponse;
 
     //strip views from schema and sort tables and fields by ID
     const tables = remote_base_schema.tables
       .map((table: Table) => {
         delete table.views;
-        table.fields.sort((a: Field, b: Field) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
+        table.fields.sort((a: Field, b: Field) =>
+          a.id < b.id ? -1 : a.id > b.id ? 1 : 0
+        );
         return table;
       })
-      .sort((a: Table, b: Table) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
+      .sort((a: Table, b: Table) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
 
     const schema = { id: params.baseId, tables };
 
@@ -85,16 +93,17 @@ async function getSchema(options: { baseId: unknown; outputDir?: string; file: s
       options.outputDir += "/";
     }
 
-
-
     //write schema to file
     const now = new Date();
 
-    const schema_file_path = options.outputDir ? join(options.outputDir, `${options.baseId}_schema_${now
-        .toISOString()
-        .replace(/[:.]/g, "-")}.json`) //replace : and . with - to avoid issues with file names
-        
-        : options.file; 
+    const schema_file_path = options.outputDir
+      ? join(
+          options.outputDir,
+          `${options.baseId}_schema_${now
+            .toISOString()
+            .replace(/[:.]/g, "-")}.json`
+        ) //replace : and . with - to avoid issues with file names
+      : options.file;
 
     // Ensure the directory exists
     await Deno.mkdir(dirname(schema_file_path), { recursive: true });
@@ -117,4 +126,3 @@ async function load_PAT_from_env(shell_PAT?: string) {
   const { AIRTABLE_PAT: envFilePAT } = await load();
   return shell_PAT || envFilePAT;
 }
-
