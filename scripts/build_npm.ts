@@ -14,6 +14,7 @@ await build({
       path: "./main.ts",
     },
   ],
+  scriptModule: false,
   outDir: OUTPUT_DIR,
   shims: {
     // see JS docs for overview and more options
