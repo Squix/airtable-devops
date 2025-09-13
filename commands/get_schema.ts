@@ -123,6 +123,8 @@ async function getSchema(options: {
 }
 async function load_PAT_from_env(shell_PAT?: string) {
   //load Airtable PAT from .env file
-  const { AIRTABLE_PAT: envFilePAT } = await load();
+  const { AIRTABLE_PAT: envFilePAT } = await load({
+    envPath: join(Deno.cwd() + "/.env"),
+  });
   return shell_PAT || envFilePAT;
 }
