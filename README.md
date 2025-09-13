@@ -32,14 +32,13 @@ A set of DevOps tools for managing Airtable bases using the command line. This t
 4. Get the schema for both bases:
    ```sh
    # Get development base schema
-   ./airtable-devops get-schema -b <development_base_id> -f ./myBase/dev/schema.json
+   airtable-devops get-schema -b <development_base_id> -f ./myBase/dev/schema.json
    
    # Get production base schema
-   ./airtable-devops get-schema -b <production_base_id> -f ./myBase/prod/schema.json
+   airtable-devops get-schema -b <production_base_id> -f ./myBase/prod/schema.json
    ```
 5. You should have this directory setup :
 <pre>
-├── airtable-devops(.exe)
 ├── .env
 └── myBase
     ├── dev
@@ -54,19 +53,25 @@ A set of DevOps tools for managing Airtable bases using the command line. This t
 
 1. Before deploying changes to production, generate a diff of your changes:
    ```sh
-   ./airtable-devops diff --old ./myBase/prod/schema.json --new ./myBase/dev/schema.json > ./myBase/deployments/vX.X.txt
+   airtable-devops diff --old ./myBase/prod/schema.json --new ./myBase/dev/schema.json > ./myBase/deployments/vX.X.txt
    ```
 
 2. Make the changes listed in `deployments/vX.X.txt` on your **Production** base
 
 3. After deploying to production, update your **Production** base schema:
    ```sh
-   ./airtable-devops get-schema -b <production_base_id> -f ./myBase/prod/schema.json
+   airtable-devops get-schema -b <production_base_id> -f ./myBase/prod/schema.json
    ```
 
 ## 📦 Installation
 
-### Option 1: Download pre-compiled binary (recommended)
+### Option 1: Install from NPM (recommended)
+
+```sh
+   npm install airtable-devops
+```
+
+### Option 2: Download pre-compiled binary
 
 1. Visit the [releases page](https://github.com/Squix/airtable-devops/releases)
 2. Download the appropriate binary for your operating system
@@ -76,11 +81,11 @@ A set of DevOps tools for managing Airtable bases using the command line. This t
    ```
 4. Move the binary to a directory in your PATH (optional)
 
-### Option 2: Run with Deno
+### Option 3: Run with Deno
 
 If you prefer to run the tool directly with Deno:
 
-1. Install [Deno](https://deno.land/manual/getting_started/installation)
+1. Install [Deno 2](https://deno.land/manual/getting_started/installation)
 2. Clone this repository:
    ```sh
    git clone https://github.com/Squix/airtable-devops.git
@@ -118,7 +123,7 @@ The tool will automatically load the PAT from your `.env` file if present. If no
 Generate schema files representing the structure of an Airtable base.
 
 ```sh
-./airtable-devops get-schema --base-id <your_base_id> [--file <output_file> | --output-dir <output_directory>]
+airtable-devops get-schema --base-id <your_base_id> [--file <output_file> | --output-dir <output_directory>]
 ```
 
 - `--base-id` (required): The base ID to get the schema from.
@@ -131,10 +136,10 @@ Example:
 
 ```sh
 # Using --file (recommended for version control)
-./airtable-devops get-schema --base-id app1234567890 --file ./schemas/my_base_schema.json
+airtable-devops get-schema --base-id app1234567890 --file ./schemas/my_base_schema.json
 
 # Using --output-dir (creates timestamped files)
-./airtable-devops get-schema --base-id app1234567890 --output-dir ./schemas/
+airtable-devops get-schema --base-id app1234567890 --output-dir ./schemas/
 ```
 
 #### ✅ Validate schema
@@ -142,14 +147,14 @@ Example:
 Validate a schema file to ensure it follows the correct structure for an Airtable base.
 
 ```sh
-./airtable-devops validate --file <path_to_schema_file>
+airtable-devops validate --file <path_to_schema_file>
 ```
 
 - `--file` (required): The path to the schema file to validate.
 
 Example:
 ```sh
-./airtable-devops validate --file ./schemas/base_schema.json
+airtable-devops validate --file ./schemas/base_schema.json
 ```
 
 The command will provide detailed error messages if the schema is invalid, showing exactly what needs to be fixed and where.
@@ -160,10 +165,10 @@ Compare two schema files/versions and show structural changes in a human-readabl
 
 ```sh
 # Comparing two distinct files
-./airtable-devops diff --old <old_schema_file> --new <new_schema_file> [--format <format>] [--color]
+airtable-devops diff --old <old_schema_file> --new <new_schema_file> [--format <format>] [--color]
 
 # Comparing two versions of the same file with Git
-./airtable-devops diff --git --old <old_schema_branch_or_commit> --new <new_schema_branch_or_commit> --tracked-file <schema_file> [--format <format>] [--color]
+airtable-devops diff --git --old <old_schema_branch_or_commit> --new <new_schema_branch_or_commit> --tracked-file <schema_file> [--format <format>] [--color]
 ```
 
 - `--old` (required): Path to the old schema file. Older branch/commit if --git is used.
@@ -177,10 +182,10 @@ Example:
 
 ```sh
 # Comparing two distinct files
-./airtable-devops diff --old ./schemas/base_schema_v1.json --new ./schemas/base_schema_v2.json
+airtable-devops diff --old ./schemas/base_schema_v1.json --new ./schemas/base_schema_v2.json
 
 # Comparing two versions of the same file (between main and dev Git branches)
-./airtable-devops diff --git --tracked-file "./schemas/base_schema.json" --old main --new dev
+airtable-devops diff --git --tracked-file "./schemas/base_schema.json" --old main --new dev
 ```
 
 The command will show a human-readable diff of the changes between the two schema files, including:
@@ -234,7 +239,7 @@ Breakdown of needed Deno permissions:
 
 ## 📖 The logbook
 Why making this? What was the journey to v1?
-All is related here: [indieforge.build/project/airtable_devops](https://indieforge.build/project/airtable_devops)
+All is told here: [indieforge.build/project/airtable_devops](https://indieforge.build/project/airtable_devops)
 
 ## 🤝 Contributing
 
